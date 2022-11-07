@@ -1,0 +1,31 @@
+First state: [8, 2, 6, 3, 9, 4, 7, 5, 1]
+              0  1  2  3  4  5  6  7  8
+Size: 3
+Iterations: 100
+Heuristic: Manhattan
+Search type: Normal
+Solvable: true
+Target: [1, 2, 3, 8, 9, 4, 7, 6, 5]
+-------
+bound: 12
+new bound: 14
+new bound: 16
+new bound: 18
+new bound: 20
+-------
+Solution: [E, N, W, S, E, S, W, N, E, N, W, S, W, N, E, S, E, N, W, S]
+Number of moves: 20
+Complexity in time: 7723
+Complexity in size: 21
+Possible nb of solvable states: 181440
+Duration: 0s (4.979407ms)
+-------
+
+    {"UP", 0, -1}
+	{"Down", 0, 1},
+	{"Left", -1, 0},
+	{"Right", 1, 0},
+
+	8 2 6
+    3 9 4
+    7 5 1
