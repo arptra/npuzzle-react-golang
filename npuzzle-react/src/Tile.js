@@ -4,7 +4,7 @@ import { getMatrixPosition, getVisualPosition } from "./helpers";
 import { PUZZLES_COUNT, BOARD_SIZE } from "./constants"
 
 function Tile(props) {
-  const { tile, index, width, height, handleTileClick } = props;
+  const { color, tile, index, width, height, handleTileClick } = props;
   const { row, col } = getMatrixPosition(index);
   // console.log("row = ", row);
   // console.log("col = ", col);
@@ -19,6 +19,7 @@ function Tile(props) {
     // border: 1px solid #FFD1AA;
     // border: `${1}px solid #FFD1AA`,
     // borderRadius: `${3}px`,
+    background: color,
     width: `calc(95% / ${ GRID_SIZE })`,
     height: `calc(95% / ${ GRID_SIZE })`,
     translateX: visualPos.x,
@@ -40,7 +41,7 @@ function Tile(props) {
             ...tileStyle,
             transform: `translate3d(${translateX}px, ${translateY}px, 0)`,
             // Is last tile?
-            opacity: tile === TILE_COUNT - 3 ? 0 : 1,
+            opacity: tile === TILE_COUNT - 3 && color !== `chartreuse` ? 0 : 1,
           }}
           className="tile"
           onClick= {() => handleTileClick(index, tile)}

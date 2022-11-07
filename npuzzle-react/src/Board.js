@@ -252,6 +252,7 @@ function Board() {
       }
       setCurrentVerbIndex(verbIndex);
     }
+    console.log(isCurrentVerbIndex)
   }
 
   const handleShuffleClick = () => {
@@ -261,6 +262,13 @@ function Board() {
   const handleStartClick = () => {
     shuffleTiles()
     setIsStarted(true)
+  }
+
+  let tileColor;
+  if (isCurrentVerbIndex === isCurrentVerbs.length - 1) {
+    tileColor = `chartreuse`;
+  } else {
+    tileColor = `#924fb9`;
   }
 
   const pieceWidth = Math.round(BOARD_SIZE / PUZZLES_COUNT[1]);
@@ -359,12 +367,13 @@ function Board() {
             <ul style={style} className="board">
               {tiles.map((tile, index) => (
                 <Tile
-                  key={tile}
-                  index={index}
-                  tile={tile}
-                  width={pieceWidth}
-                  height={pieceHeight}
-                  handleTileClick={handleTileClick}
+                    color={tileColor}
+                    key={tile}
+                    index={index}
+                    tile={tile}
+                    width={pieceWidth}
+                    height={pieceHeight}
+                    handleTileClick={handleTileClick}
                 />
               ))}
             </ul>
