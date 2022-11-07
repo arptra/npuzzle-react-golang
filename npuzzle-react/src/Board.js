@@ -170,6 +170,37 @@ function Board() {
 
   }
 
+  const SwitchTilesToEnd = () => {
+    let index = isCurrentEmptyTileIndex;
+    let verbIndex = isCurrentVerbIndex;
+    if (verbIndex > -1 && verbIndex < isCurrentVerbs.length - 1) {
+      let shuffledTiles = tiles;
+      let i;
+      for (i = verbIndex; i < isCurrentVerbs.length - 1; i++) {
+        if (isCurrentVerbs[i] === "LEFT") {
+          index--;
+          shuffledTiles = swapTilesAuto(index, shuffledTiles.indexOf(shuffledTiles.length - 3), shuffledTiles)
+        } else if (isCurrentVerbs[i] === "RIGHT") {
+          index++;
+          shuffledTiles = swapTilesAuto(index, shuffledTiles.indexOf(shuffledTiles.length - 3), shuffledTiles)
+        } else if (isCurrentVerbs[i] === "UP") {
+          index = index - PUZZLES_COUNT[1];
+          shuffledTiles = swapTilesAuto(index, shuffledTiles.indexOf(shuffledTiles.length - 3), shuffledTiles)
+        } else if (isCurrentVerbs[i] === "DOWN") {
+          index = index + PUZZLES_COUNT[1];
+          shuffledTiles = swapTilesAuto(index, shuffledTiles.indexOf(shuffledTiles.length - 3), shuffledTiles)
+        }
+      }
+      setCurrentEmptyTileIndex(index);
+      console.log(i)
+      if (i > isCurrentVerbs.length ) {
+        setCurrentVerbIndex(isCurrentVerbs.length - 1);
+      } else {
+        setCurrentVerbIndex(i - 1);
+      }
+    }
+  }
+
   const handleTileSwitchStep = (step) => {
     let index;
     let verbIndex = isCurrentVerbIndex;
@@ -406,19 +437,16 @@ function Board() {
             (<ArrowBackIcon fontSize="large" style={{color: `#924fb9`}} onClick={() => handleTileSwitchStep("back")}></ArrowBackIcon>) :
             (<ArrowBackIcon fontSize="large" style={{color: "grey"}}></ArrowBackIcon>)
         }
-        <div></div>
-        <div></div>
+        {!isTileClickRun ?
+            (<RestartAltIcon fontSize="large" style={{color: `#924fb9`}} onClick={() => SwitchTilesToEnd()}></RestartAltIcon>) :
+            (<RestartAltIcon fontSize="large" style={{color: "grey"}}></RestartAltIcon>)
+        }
         {!isTileClickRun ?
             (<ArrowForwardIcon fontSize="large" style={{color: `#924fb9`}} onClick={() => handleTileSwitchStep("forward")}></ArrowForwardIcon>) :
             (<ArrowForwardIcon fontSize="large" style={{color: "grey"}}></ArrowForwardIcon>)
         }
-        {/*<div></div>*/}
-        {/*<div></div>*/}
-        {/*{!isTileClickRun ?*/}
-        {/*    (<RestartAltIcon fontSize="large" style={{color: `#924fb9`}} onClick={() => SwitchTilesToEnd("test")}></RestartAltIcon>) :*/}
-        {/*    (<RestartAltIcon fontSize="large" style={{color: "grey"}}></RestartAltIcon>)*/}
-        {/*}*/}
       </Stack>
+
       <Stack direction="row" spacing={1}>
         {!isStarted ?
             (<Button style={{color: `chartreuse`}} onClick={() => handleStartClick()}>Start</Button>) :
