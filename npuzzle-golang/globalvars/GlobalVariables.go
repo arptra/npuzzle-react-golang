@@ -8,3 +8,4 @@ var InputStateKey = "inputState"
 var EmptyTileKey = "emptyTile"
 var SuccessPath map[string][]string
 var PathKey = "successPath"
+var Heuristic = "manhattan"
