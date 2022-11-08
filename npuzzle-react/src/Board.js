@@ -41,6 +41,10 @@ function Board() {
   const [isCurrentEmptyTileIndex, setCurrentEmptyTileIndex] = useState(0);
   const [isCurrentVerbs, setCurrentVerbs] = useState("");
   const [isCurrentVerbIndex, setCurrentVerbIndex] = useState(0);
+  const [isManhattanHe, setManhattanHe] = useState(true);
+  const [isEuclideanHe, setEuclideanHe] = useState(false);
+  const [isHammingHe, setHammingHe] = useState(false);
+
 
   // const forceUpdate = useForceUpdate();
 
@@ -97,6 +101,7 @@ function Board() {
   const shuffleTiles = async () => {
     shuffledTiles = shuffle(tiles)
     setTiles(shuffledTiles);
+    console.log(shuffledTiles)
     setStopCalc(false);
 
     const res = await Requests.putState({
@@ -381,8 +386,6 @@ function Board() {
           <Item>
             <Grid>
               <br />
-              <br />
-              <br />
               <Tooltip title="change wait seconds calculating timeout" placement="right-end">
                 {REQ_WAIT_CALC[0] === 3 ?
                     (<Button style={{color: `chartreuse`}} onClick={() => setWaitTimeout(3)}>3 sec timeout</Button>) :
@@ -392,18 +395,12 @@ function Board() {
               <br />
               <br />
               <br />
-              <br />
-              <br />
-              <br />
               <Tooltip title="change wait seconds calculating timeout" placement="right-end">
                 {REQ_WAIT_CALC[0] === 5 ?
                     (<Button style={{color: `chartreuse`}} onClick={() => setWaitTimeout(5)}>5 sec timeout</Button>) :
                     (<Button style={{color: `#924fb9`}} onClick={() => setWaitTimeout(5)}>5 sec timeout</Button>)
                 }
               </Tooltip>
-              <br />
-              <br />
-              <br />
               <br />
               <br />
               <br />
@@ -418,7 +415,6 @@ function Board() {
               <br />
               <br />
               <br />
-              <br />
               <Tooltip title="automatically switch tiles" placement="right-end">
                 {!isTileClickRun ?
                     (<Button style={{color: `chartreuse`}} onClick={() => setTileClickRegime(true)}>server switch</Button>) :
@@ -428,16 +424,43 @@ function Board() {
               <br />
               <br />
               <br />
-              <br />
-              <br />
-              <br />
               <Tooltip title="manually switch tiles" placement="right-end">
                 {isTileClickRun ?
                     (<Button style={{color: `chartreuse`}} onClick={() => setTileClickRegime(false)}>manual switch</Button>) :
                     (<Button style={{color: `#924fb9`}} onClick={() => setTileClickRegime(true)}>manual switch</Button>)
                 }
               </Tooltip>
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
+              <Tooltip title="Manhattan heuristics" placement="right-end">
+                {isManhattanHe ?
+                    (<Button style={{color: `chartreuse`}} onClick={() => {setManhattanHe(true); setEuclideanHe(false); setHammingHe(false)}}>Manhattan he</Button>) :
+                    (<Button style={{color: `#924fb9`}} onClick={() => {setManhattanHe(true); setEuclideanHe(false); setHammingHe(false)}}>Manhattan he</Button>)
+                }
+              </Tooltip>
+              <br />
+              <br />
+              <br />
+              <Tooltip title="Euclidean heuristics" placement="right-end">
+                {isEuclideanHe ?
+                    (<Button style={{color: `chartreuse`}} onClick={() => {setManhattanHe(false); setEuclideanHe(true); setHammingHe(false)}}>Euclidean he</Button>) :
+                    (<Button style={{color: `#924fb9`}} onClick={() => {setManhattanHe(false); setEuclideanHe(true); setHammingHe(false)}}>Euclidean he</Button>)
+                }
+              </Tooltip>
+              <br />
+              <br />
+              <br />
+              <Tooltip title="Hamming heuristics" placement="right-end">
+                {isHammingHe ?
+                    (<Button style={{color: `chartreuse`}} onClick={() => {setManhattanHe(false); setEuclideanHe(false); setHammingHe(true)}}>Hamming he</Button>) :
+                    (<Button style={{color: `#924fb9`}} onClick={() => {setManhattanHe(false); setEuclideanHe(false); setHammingHe(true)}}>Hamming he</Button>)
+                }
+              </Tooltip>
             </Grid>
+
           </Item>
         </Box>
       </div>
