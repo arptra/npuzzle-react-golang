@@ -6,7 +6,7 @@ class Requests {
         return axios.get('http://localhost:8080/api/v1/stop');
     }
     async getState(tilesNum, he, solvable) {
-        return axios.get(`http://localhost:8080/api/v1/algo/${tilesNum}/${he}/${solvable}`);
+        return axios.get(`http://localhost:8080/api/v1/state/${tilesNum}/${he}/${solvable}`);
     }
 
     // startAlgo() {

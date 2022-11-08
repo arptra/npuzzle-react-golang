@@ -122,11 +122,11 @@ function Board() {
       setTiles(shuffledTiles);
       setStopCalc(false);
       countGetWaitReq = 0;
-      setTimeout(() => {
-        handleGetRequest(shuffledTiles);
-      }, 1000);
-    } else {
-      console.log(res.status);
+    //   setTimeout(() => {
+    //     handleGetRequest(shuffledTiles);
+    //   }, 1000);
+    // } else {
+    //   console.log(res.status);
     }
   }
 
