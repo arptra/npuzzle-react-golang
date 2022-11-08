@@ -42,14 +42,17 @@ func GetState(context *gin.Context) {
 	globalvars.ALGO_END = false // if previous GET request not 200
 
 	tilesNum := context.Param("tilesNum")
-	size, err := strconv.Atoi(tilesNum)
-	log.Println(size)
+	emptyTileNumber, err := strconv.Atoi(tilesNum)
+	log.Println(emptyTileNumber)
 	if err != nil {
 		log.Println(err)
 	}
 
-	size = int(math.Sqrt(float64(size)))
+	size := int(math.Sqrt(float64(emptyTileNumber)))
 	he := context.Param("he")
+	if he == "" {
+		he = globalvars.Heuristic
+	}
 	solvable, err := strconv.ParseBool(context.Param("solvable"))
 	if err != nil {
 		log.Println(err)
@@ -62,7 +65,7 @@ func GetState(context *gin.Context) {
 		fmt.Fprintf(os.Stderr, "This puzzle IS NOT solvable\n")
 		context.AbortWithStatus(202)
 	}
-	replaceDigit(arr, 0, 9)
+	replaceDigit(arr, 0, emptyTileNumber)
 	log.Println(arr)
 	for i := range arr { // some crutch because I do not want to debug react, sorry
 		arr[i] = arr[i] - 1
@@ -73,6 +76,7 @@ func GetState(context *gin.Context) {
 	}
 	globalvars.GenState = arr
 	globalvars.Heuristic = he
+	globalvars.EmptyTileNumber = emptyTileNumber
 }
 
 func StartAlgo(context *gin.Context) {

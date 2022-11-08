@@ -11,7 +11,7 @@ var FOUND = false
 
 func AlgoStart(start, goal board.StateOfBoard) int {
 	fmt.Println("Algo start")
-	threshold := ManhattanDist(start, goal)
+	threshold := getScore(start, goal, globalvars.Heuristic)
 	for {
 		temp := Search(start, goal, 0, threshold) //function search(node,g score,threshold)
 		if temp == -1 {
@@ -30,7 +30,7 @@ func AlgoStart(start, goal board.StateOfBoard) int {
 }
 
 func Search(node, goal board.StateOfBoard, g, threshold float64) float64 {
-	f := g + ManhattanDist(node, goal)
+	f := g + getScore(node, goal, globalvars.Heuristic)
 	if f > threshold {
 		return f
 	}
