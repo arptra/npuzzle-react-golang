@@ -122,11 +122,11 @@ function Board() {
       setTiles(shuffledTiles);
       setStopCalc(false);
       countGetWaitReq = 0;
-    //   setTimeout(() => {
-    //     handleGetRequest(shuffledTiles);
-    //   }, 1000);
-    // } else {
-    //   console.log(res.status);
+      setTimeout(() => {
+        handleGetRequest(shuffledTiles);
+      }, 1000);
+    } else {
+      console.log(res.status);
     }
   }
 
@@ -213,7 +213,7 @@ function Board() {
     if (verbIndex > -1 && verbIndex < isCurrentVerbs.length - 1) {
       let shuffledTiles = tiles;
       let i;
-      for (i = verbIndex; i < isCurrentVerbs.length - 1; i++) {
+      for (i = verbIndex; i < isCurrentVerbs.length; i++) {
         if (isCurrentVerbs[i] === "LEFT") {
           index--;
           shuffledTiles = swapTilesAuto(index, shuffledTiles.indexOf(shuffledTiles.length - 3), shuffledTiles)
@@ -241,12 +241,12 @@ function Board() {
   const handleTileSwitchStep = (step) => {
     let index;
     let verbIndex = isCurrentVerbIndex;
-    if (verbIndex > -1 && verbIndex < isCurrentVerbs.length) {
+    if (verbIndex > -1 && verbIndex <= isCurrentVerbs.length && isCurrentVerbIndex <= isCurrentVerbs.length) {
       if (step === "back") {
         if (verbIndex === 0) {
           return;
         }
-        --verbIndex;
+        verbIndex--;
         if (isCurrentVerbs[verbIndex] === "LEFT") {
           index = isCurrentEmptyTileIndex + 1;
           swapTilesAutoClick(index, tiles.indexOf(tiles.length - 3), tiles);
@@ -265,7 +265,7 @@ function Board() {
           setCurrentEmptyTileIndex(index);
         }
       } else if (step === "forward") {
-        if (verbIndex === isCurrentVerbs.length - 1) {
+        if (isCurrentVerbIndex >= isCurrentVerbs.length) {
           return;
         }
         if (isCurrentVerbs[verbIndex] === "LEFT") {
@@ -285,11 +285,13 @@ function Board() {
           swapTilesAutoClick(index, tiles.indexOf(tiles.length - 3), tiles);
           setCurrentEmptyTileIndex(index);
         }
-        ++verbIndex;
+        verbIndex++;
       }
-      setCurrentVerbIndex(verbIndex);
+      if (verbIndex <= isCurrentVerbs.length) {
+        setCurrentVerbIndex(verbIndex);
+      }
     }
-    console.log(isCurrentVerbIndex)
+    console.log("isCurrentVerbIndex = ", isCurrentVerbIndex)
   }
 
   const handleShuffleClick = () => {
@@ -306,7 +308,7 @@ function Board() {
 
 
   let tileColor;
-  if (isCurrentVerbIndex === isCurrentVerbs.length - 1) {
+  if ((isCurrentVerbIndex === isCurrentVerbs.length - 1 || isCurrentVerbIndex === isCurrentVerbs.length) && isCurrentVerbIndex !== 0) {
     tileColor = `chartreuse`;
   } else {
     tileColor = `#924fb9`;
