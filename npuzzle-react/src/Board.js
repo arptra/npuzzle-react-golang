@@ -122,6 +122,7 @@ function Board() {
       setTiles(shuffledTiles);
       setStopCalc(false);
       countGetWaitReq = 0;
+      Requests.startAlgo()
       setTimeout(() => {
         handleGetRequest(shuffledTiles);
       }, 1000);
@@ -129,25 +130,6 @@ function Board() {
       console.log(res.status);
     }
   }
-
-  // const shuffleTiles = async () => {
-  //   shuffledTiles = shuffle(tiles)
-  //   setTiles(shuffledTiles);
-  //   console.log(shuffledTiles)
-  //   setStopCalc(false);
-  //
-  //   const res = await Requests.putState({
-  //     inputState: shuffledTiles,
-  //     emptyTile: [PUZZLES_COUNT[0] - 3]
-  //   })
-  //   if (res.status === 200) {
-  //     Requests.startAlgo()
-  //     countGetWaitReq = 0;
-  //     setTimeout(() => {
-  //       handleGetRequest(shuffledTiles);
-  //     }, 1000);
-  //   }
-  // }
 
   const swapTiles = (tileIndex) => {
     if (canSwap(tileIndex, tiles.indexOf(tiles.length - 3))) {
@@ -295,12 +277,10 @@ function Board() {
   }
 
   const handleShuffleClick = () => {
-    // shuffleTiles()
     GetServerTiles()
   }
 
   const handleStartClick = () => {
-    // shuffleTiles()
     GetServerTiles()
     setIsStarted(true)
   }
@@ -533,9 +513,6 @@ function Board() {
                 (<Button style={{color: `#924fb9`}} onClick={() => handleShuffleClick()}>Restart</Button>) :
                 (<Button style={{color: `#924fb9`}} onClick={() => handleShuffleClick()}>Timeout of calculation. Restart</Button>)
         }
-        {/*<FormGroup>*/}
-        {/*  <FormControlLabel style={{color: `#924fb9`}} control={<Switch defaultChecked color="secondary"/>} label="automatically switch tiles" />*/}
-        {/*</FormGroup>*/}
       </Stack>
     </>
   );
