@@ -44,6 +44,8 @@ function Board() {
   const [isManhattanHe, setManhattanHe] = useState(true);
   const [isEuclideanHe, setEuclideanHe] = useState(false);
   const [isHammingHe, setHammingHe] = useState(false);
+  const [isSolvable, setSolvable] = useState(true);
+
 
 
   // const forceUpdate = useForceUpdate();
@@ -98,24 +100,54 @@ function Board() {
     }
   }
 
-  const shuffleTiles = async () => {
-    shuffledTiles = shuffle(tiles)
-    setTiles(shuffledTiles);
-    console.log(shuffledTiles)
-    setStopCalc(false);
+  const GetServerTiles = async () => {
+    let he;
 
-    const res = await Requests.putState({
-      inputState: shuffledTiles,
-      emptyTile: [PUZZLES_COUNT[0] - 3]
-    })
-    if (res.status === 200) {
-      Requests.startAlgo()
+    if (isManhattanHe) {
+      he = "Manhattan";
+    } else if (isEuclideanHe) {
+      he = "Euclidean";
+    } else if (isHammingHe) {
+      he = "Hamming";
+    }
+    if (isSolvable) {
+      console.log(isSolvable);
+    }
+
+    console.log(he)
+    const res = await Requests.getState(PUZZLES_COUNT[0], he, isSolvable);
+    if  (res.status === 200) {
+      console.log(res.data)
+      shuffledTiles = res.data;
+      setTiles(shuffledTiles);
+      setStopCalc(false);
       countGetWaitReq = 0;
       setTimeout(() => {
         handleGetRequest(shuffledTiles);
       }, 1000);
+    } else {
+      console.log(res.status);
     }
   }
+
+  // const shuffleTiles = async () => {
+  //   shuffledTiles = shuffle(tiles)
+  //   setTiles(shuffledTiles);
+  //   console.log(shuffledTiles)
+  //   setStopCalc(false);
+  //
+  //   const res = await Requests.putState({
+  //     inputState: shuffledTiles,
+  //     emptyTile: [PUZZLES_COUNT[0] - 3]
+  //   })
+  //   if (res.status === 200) {
+  //     Requests.startAlgo()
+  //     countGetWaitReq = 0;
+  //     setTimeout(() => {
+  //       handleGetRequest(shuffledTiles);
+  //     }, 1000);
+  //   }
+  // }
 
   const swapTiles = (tileIndex) => {
     if (canSwap(tileIndex, tiles.indexOf(tiles.length - 3))) {
@@ -261,13 +293,17 @@ function Board() {
   }
 
   const handleShuffleClick = () => {
-    shuffleTiles()
+    // shuffleTiles()
+    GetServerTiles()
   }
 
   const handleStartClick = () => {
-    shuffleTiles()
+    // shuffleTiles()
+    GetServerTiles()
     setIsStarted(true)
   }
+
+
 
   let tileColor;
   if (isCurrentVerbIndex === isCurrentVerbs.length - 1) {
@@ -366,6 +402,15 @@ function Board() {
                     (<Button style={{color: `#924fb9`}} onClick={() => setTilesToNum(10)}>10x10 puzzles</Button>)
                 }
               </Tooltip>
+              <br />
+              <br />
+              <Tooltip title="change solvability" placement="left-end">
+                {isSolvable ?
+                    (<Button style={{color: `chartreuse`}} onClick={() => setSolvable(false)}>solvable</Button>) :
+                    (<Button style={{color: `#924fb9`}} onClick={() => setSolvable(true)}>solvable</Button>)
+                }
+              </Tooltip>
+
             </Grid>
           </Item>
           <Item>
