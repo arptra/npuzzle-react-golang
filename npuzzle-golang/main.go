@@ -5,8 +5,12 @@ import (
 	"N-puzzle-GO/pkg/algo"
 	"N-puzzle-GO/pkg/apiserver"
 	"N-puzzle-GO/pkg/board"
+	"bufio"
+	"fmt"
 	"log"
 	"os"
+	"strconv"
+	"strings"
 )
 
 func manual() {
@@ -54,13 +58,33 @@ func manual() {
 }
 
 func main() {
-	if len(os.Args) > 2 || (len(os.Args) == 2 && os.Args[1] != "manual") {
-		log.Fatal("usage: ./npuzzle manual | ./npuzzle")
+	if len(os.Args) > 2 || (len(os.Args) == 2 && os.Args[1] != "input") {
+		log.Fatal("usage: ./npuzzle | ./npuzzle input")
 	}
 	if len(os.Args) == 1 {
 		globalvars.SERVER_MODE = true
 		apiserver.ApiServerStart()
 	} else {
-		manual()
+		manualInput()
+		globalvars.ManualInput = true
+		apiserver.ApiServerStart()
+	}
+	fmt.Println("Complexity in size: " + strconv.Itoa(globalvars.SizeComplexity) + "\n")
+	fmt.Println("Complexity in time: " + strconv.Itoa(globalvars.TimeComplexity) + "\n")
+	os.Exit(0)
+}
+
+func manualInput() {
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print("Input digit with space between it and press enter: ")
+	text, _ := reader.ReadString('\n')
+	output := strings.Fields(text)
+	for _, v := range output {
+		if digit, err := strconv.Atoi(v); err == nil {
+			globalvars.Arr = append(globalvars.Arr, digit)
+		} else {
+			fmt.Println("Some error cath while parse your input")
+			os.Exit(1)
+		}
 	}
 }

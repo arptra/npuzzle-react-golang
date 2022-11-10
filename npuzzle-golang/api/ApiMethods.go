@@ -34,13 +34,15 @@ func GetPath(context *gin.Context) {
 
 func GetState(context *gin.Context) {
 	//arr := []int{8, 2, 6, 3, 9, 4, 7, 5, 1} // work
+	//arr := []int{8 2 6 3 9 4 7 5 1} // work
 	//arr := []int{6, 9, 8, 3, 1, 5, 7, 4, 2} // also work
 	//arr := []int{1, 2, 3, 8, 9, 7, 4, 5, 6} // dont work (unsolvable)
 	//for i := range arr { // some crutch because I do not want to debug react, sorry
 	//	arr[i] = arr[i] - 1
 	//}
 	globalvars.ALGO_END = false // if previous GET request not 200
-
+	arr := make([]int, 0)
+	size := 0
 	tilesNum := context.Param("tilesNum")
 	emptyTileNumber, err := strconv.Atoi(tilesNum)
 	log.Println(emptyTileNumber)
@@ -48,7 +50,6 @@ func GetState(context *gin.Context) {
 		log.Println(err)
 	}
 
-	size := int(math.Sqrt(float64(emptyTileNumber)))
 	he := context.Param("he")
 	if he == "" {
 		he = globalvars.Heuristic
@@ -57,13 +58,22 @@ func GetState(context *gin.Context) {
 	if err != nil {
 		log.Println(err)
 	}
-	iterations := 100
-	arr := makePuzzle(size, solvable, iterations)
+	if !globalvars.ManualInput {
+		iterations := 100
+		size = int(math.Sqrt(float64(emptyTileNumber)))
+		arr = makePuzzle(size, solvable, iterations)
+	} else {
+		size = len(globalvars.Arr)
+		arr = globalvars.Arr
+		replaceDigit(arr, size, 0)
+		size = int(math.Sqrt(float64(size)))
+	}
 	result := BuildCorrectResult(size)
 	isSolvable := CheckSolvable(arr, result, size)
 	if !isSolvable {
 		fmt.Fprintf(os.Stderr, "This puzzle IS NOT solvable\n")
 		context.AbortWithStatus(202)
+		os.Exit(1)
 	}
 	replaceDigit(arr, 0, emptyTileNumber)
 	log.Println(arr)
@@ -108,6 +118,8 @@ func StartAlgo(context *gin.Context) {
 	if status == -1 {
 		globalvars.STOP_CALC = false
 	}
+	fmt.Println("Complexity in size: " + strconv.Itoa(globalvars.SizeComplexity) + "\n")
+	fmt.Println("Complexity in time: " + strconv.Itoa(globalvars.TimeComplexity) + "\n")
 }
 
 func CheckSolvable(givenTab []int, result []int, size int) bool {

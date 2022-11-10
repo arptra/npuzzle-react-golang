@@ -30,6 +30,7 @@ func AlgoStart(start, goal board.StateOfBoard) int {
 }
 
 func Search(node, goal board.StateOfBoard, g, threshold float64) float64 {
+	globalvars.TimeComplexity++
 	f := g + getScore(node, goal, globalvars.Heuristic)
 	if f > threshold {
 		return f
@@ -42,6 +43,7 @@ func Search(node, goal board.StateOfBoard, g, threshold float64) float64 {
 		} else {
 			savePath(path)
 			printPath(path)
+			globalvars.SizeComplexity = len(path)
 		}
 		return f
 	}
